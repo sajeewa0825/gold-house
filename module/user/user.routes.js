@@ -13,7 +13,7 @@ userRoutes.post("/register",userRegister)
 userRoutes.post("/login",userLogin)
 userRoutes.post("/frogetpw",frogetPw)
 userRoutes.post("/resetpw",resetPw)
-userRoutes.get("/verify-email/:token",emailVerify)
+userRoutes.get("/verify-email",emailVerify)
 userRoutes.use(middleware)
 // userRoutes.get("/dashbord",userDashbord)
 

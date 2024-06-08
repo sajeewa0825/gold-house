@@ -8,15 +8,16 @@ const verifyEmail = async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        
-        await userModel.findOne({ email: decoded.email }).then((user) => { 
+        // Check if the user exists
+        await userModel.findOne({ email: decoded.data }).then((user) => { 
             if (!user) {
                 res.status(400).send('Invalid Email.');
             }
         });
 
-        await userModel.updateOne({ email: decoded.email }, { status: 'active' }).then((user) => {
-            res.status(200).send(`Email ${decoded.email} verified successfully!`);
+        // Update the user status to active
+        await userModel.updateOne({ email: decoded.data }, { status: 'active' }).then((user) => {
+            res.status(200).send(`Email ${decoded.data} verified successfully!`);
         });
         
     } catch (error) {
