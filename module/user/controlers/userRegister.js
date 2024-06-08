@@ -56,12 +56,16 @@ const register = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     //save data
-    const registerUser = await userModel.create({
+    await userModel.create({
         name: name,
         email: email,
         password: hash,
         status: 'pending'
-    })
+    }).then((data) => {
+        console.log(data);
+    }).catch((error) => {
+        console.log(error);
+    });
 
     const token = jwtEncrypt(email)
     const link = `${process.env.BASE_URL}/api/user/verify-email?token=${token}`
