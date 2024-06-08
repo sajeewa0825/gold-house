@@ -23,17 +23,31 @@ const login = async (req, res) => {
     }
 
     const user = await userModel.findOne({email:email})
-    if(!user) throw "user not found";
+    if(!user){
+        res.status(400).json({
+            status:"fail",
+            message:"invalid email"
+        });
+        return;
+    }
 
+    //check password
     const validPassword = await bcrypt.compare(password, user.password);
-    if(!validPassword) throw "invalid email or password";
+    
+    if(!validPassword){
+        res.status(400).json({
+            status:"fail",
+            message:"invalid password"
+        });
+        return;
+    
+    }
 
-    const accessToken = jwtManager(user);
 
     res.status(200).json({
         status:"success",
         message: 'Login successful',
-        accessToken:accessToken
+        accessToken:jwtManager(user)
     });
 };
 
