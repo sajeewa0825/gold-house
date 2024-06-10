@@ -1,36 +1,43 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt")
+const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
-const resetPw = async (req, res) =>{
-    const {email, resetCode, newpw} = req.body
-
+const resetPassword = async (req, res) => {
+    const { token, newPassword } = req.body;
     const userModel = mongoose.model("user");
 
-    if(!email) throw "Email is reqired"
-    if(!resetCode) throw "reset Code is required"
-    if(!newpw) throw "password is required"
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const hash = await bcrypt.hash(newpw, 10);
+    if (!decoded.data) {
+        res.status(400).json({
+            status: "fail",
+            message: "invalid token"
+        })
+        return
+    }
 
-    const user = await userModel.findOne({
-        email:email,
-        resetCode:resetCode
-    })
+    if (!newPassword) {
+        res.status(400).json({
+            status: "fail",
+            message: "password is required"
+        })
+        return
+    }
 
-    if(!user) throw "Reset code incorrect"
+    const hash = await bcrypt.hash(newPassword, 10);
 
-    await userModel.findOneAndUpdate({
-        email:email
-    },{
-        password:hash
-    },{
-        runValidators: true,
-    })
-    
-    res.status(200).json({
-        status:"password reset succesfull "
-    })
+    await userModel.updateOne({ email: decoded.data }, { password: hash }).then((user) => {
+        res.status(200).send({status: 'success', message: 'Password reset successful'});
+    }).catch((error) => {
+        res.status(400).json({
+            status: "fail",
+            message: "something went wrong"
+        })
+    });
+
+
 
 }
 
-module.exports = resetPw;
+module.exports = resetPassword;

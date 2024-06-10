@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwtManager = require('../../../manager/jwtmanager');
+const e = require('express');
 
 const login = async (req, res) => {
     const userModel = mongoose.model('user');
@@ -23,18 +24,47 @@ const login = async (req, res) => {
     }
 
     const user = await userModel.findOne({email:email})
-    if(!user) throw "user not found";
+    if(!user){
+        res.status(400).json({
+            status:"fail",
+            message:"invalid email"
+        });
+        return;
+    }
 
+    //check password
     const validPassword = await bcrypt.compare(password, user.password);
-    if(!validPassword) throw "invalid email or password";
+    
+    if(!validPassword){
+        res.status(400).json({
+            status:"fail",
+            message:"invalid password"
+        });
+        return;
+    
+    }
 
-    const accessToken = jwtManager(user);
+    if(user.status === 'pending'){
+        res.status(400).json({
+            status:"fail",
+            message:"Emai not verified yet"
+        });
+        return;
+    } else if(user.status === 'active'){
+        res.status(200).json({
+            status:"success",
+            message: 'Login successful',
+            accessToken:jwtManager(user)
+        });
+        return;
+    } else {
+        res.status(400).json({
+            status:"fail",
+            message:"Invalid user status"
+        });
+        return;
+    }
 
-    res.status(200).json({
-        status:"success",
-        message: 'Login successful',
-        accessToken:accessToken
-    });
 };
 
 module.exports = login
