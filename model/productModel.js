@@ -90,5 +90,13 @@ const productSchema = new mongoose.Schema({
         required : [true, "product style is required"],
         enum : ['Cuban','Tennis','Figaro','Rope','Palm','Our Exclusive']
     }
-});
+
+
+},
+
+{
+    timestamps:true
+}
+
+);
 
