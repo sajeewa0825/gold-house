@@ -27,6 +27,23 @@ const sendMail = async (to, subject, token) => {
   </body>
   </html>
   `;
+  } else if (subject === "Resetpw") {
+    subject = "Gold House Password Reset";
+    text = `
+    <html>
+    <head>
+    </head>
+    <body>
+    <div style="font-family: Arial, sans-serif; text-align: center;">
+    <h1>Password Reset</h1>
+    <p>Click the button below to reset your password.</p>
+    <a href="${token}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #28a745; border-radius: 5px; text-decoration: none;">Reset Password</a>
+    <p>If the button above does not work, please click the link below or copy and paste it into your browser:</p>
+    <a href="${token}">${token}</a>
+  </div>
+  </body>
+  </html>
+  `;
   }
 
   await transporter

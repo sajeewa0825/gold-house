@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require("cors");
 require('dotenv').config();
+const path = require('path');
 const userRoutes = require("./module/user/user.routes")
 const productRoutes = require("./module/product/product.routes")
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(cors())
 // parse application/x-www-form-urlencoded
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect(process.env.MONGO_DB_URL, {}).then(() => {
     console.log("Database connection succesfuly");
