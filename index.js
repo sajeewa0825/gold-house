@@ -4,6 +4,7 @@ const cors = require("cors");
 require('dotenv').config();
 const path = require('path');
 const userRoutes = require("./module/user/user.routes")
+const productRoutes = require("./module/product/product.routes")
 
 const port = 3000;
 const app = express();
@@ -22,9 +23,11 @@ mongoose.connect(process.env.MONGO_DB_URL, {}).then(() => {
 
 // mongoose.model("User", userSchema)
 require("./model/userModel")
+require("./model/productModel")
 
 // Main route
 app.use("/api/user", userRoutes)
+app.use("/api/product", productRoutes)
 
 
 // handle 404 not found error

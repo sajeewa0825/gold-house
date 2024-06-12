@@ -55,7 +55,7 @@ const productSchema = new mongoose.Schema({
     color : {
         type : String,
         required : [true, "color is required"],
-        enum : ['gold','silver','rose gold','white gold']
+        enum : ['gold','silver','rose gold','white gold'] 
     },
 
     stone : {
@@ -99,4 +99,8 @@ const productSchema = new mongoose.Schema({
 }
 
 );
+
+const productModel = mongoose.model('product', productSchema);
+
+module.exports = productModel;
 
