@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const db = require('../../../model/mysql/index');
+
+const User = db.user;
 
 const verifyEmail = async (req, res) => {
     const { token } = req.query;
@@ -8,18 +11,32 @@ const verifyEmail = async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        // MongoDB code
+        // // Check if the user exists
+        // await userModel.findOne({ email: decoded.data }).then((user) => { 
+        //     if (!user) {
+        //         res.status(400).send('Invalid Email.');
+        //     }
+        // });
+
+        // // Update the user status to active
+        // await userModel.updateOne({ email: decoded.data }, { status: 'active' }).then((user) => {
+        //     res.status(200).send(`Email ${decoded.data} verified successfully!`);
+        // });
+
+
+        // Sequelize code 
         // Check if the user exists
-        await userModel.findOne({ email: decoded.data }).then((user) => { 
-            if (!user) {
-                res.status(400).send('Invalid Email.');
-            }
-        });
+        const user = await User.findOne({ where: { email: decoded.data } });
+        if (!user) {
+            return res.status(400).send('Invalid Email.');
+        }
 
         // Update the user status to active
-        await userModel.updateOne({ email: decoded.data }, { status: 'active' }).then((user) => {
-            res.status(200).send(`Email ${decoded.data} verified successfully!`);
-        });
-        
+        await User.update({ status: 'active' }, { where: { email: decoded.data } });
+        return res.status(200).send(`Email ${decoded.data} verified successfully!`);
+
+
     } catch (error) {
         res.status(400).send('Invalid or expired token.');
     }

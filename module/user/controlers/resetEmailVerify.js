@@ -1,16 +1,21 @@
 const path = require('path');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const db = require("../../../model/mysql/index")
+
+// Mysql DB model call
+const UserDB = db.user;
 
 const verifyEmail = async (req, res) => {
     const { token } = req.query;
-    const userModel = mongoose.model('user');
+    //const userModel = mongoose.model('user');
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // Check if the user exists
-        const user = await userModel.findOne({ email: decoded.data });
+        //const user = await userModel.findOne({ email: decoded.data });
+        const user = await UserDB.findOne({ where: { email: decoded.data } });
         if (!user) {
             return res.status(400).send('Invalid Email.');
         }

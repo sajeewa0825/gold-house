@@ -2,12 +2,16 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const sendMail = require("../../../manager/mail")
 const jwtEncrypt = require("../../../manager/jwtEncrypt")
+const db = require("../../../model/mysql/index")
+
+// Mysql DB model call
+const user = db.user;
 
 
 const register = async (req, res) => {
 
     const { name, email, password } = req.body
-    const userModel = mongoose.model("user");
+   // const userModel = mongoose.model("user");
 
     if (!name) {
         res.status(400).json({
@@ -41,8 +45,11 @@ const register = async (req, res) => {
         return
     }
 
-    //check email exist or not
-    const checkemail = await userModel.findOne({ email: email })
+    // MongoDB check email exist or not
+    // const checkemail = await userModel.findOne({ email: email })
+
+    // Sequelize code to check if an email exists
+    const checkemail = await user.findOne({ where: { email: email } });
 
     if (checkemail) {
         res.status(400).json({
@@ -55,14 +62,29 @@ const register = async (req, res) => {
     //hash password
     const hash = await bcrypt.hash(password, 10);
 
-    //save data
-    await userModel.create({
+    // //save data MongoDB
+    // await userModel.create({
+    //     name: name,
+    //     email: email,
+    //     password: hash,
+    //     status: 'pending'
+    // }).then((data) => {
+    //     console.log(data);
+    // }).catch((error) => {
+    //     console.log(error);
+    // });
+
+
+    //save data Sequelize
+    let data = {
         name: name,
         email: email,
         password: hash,
         status: 'pending'
-    }).then((data) => {
-        console.log(data);
+    }
+
+    user.create(data).then((data) => {
+        console.log("succes full created Mysql");
     }).catch((error) => {
         console.log(error);
     });

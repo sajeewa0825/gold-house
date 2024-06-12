@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwtManager = require('../../../manager/jwtmanager');
-const e = require('express');
+const db = require("../../../model/mysql/index")
+
+// Mysql DB model call
+const UserDB = db.user;
 
 const login = async (req, res) => {
     const userModel = mongoose.model('user');
@@ -22,8 +25,10 @@ const login = async (req, res) => {
         });
         return;
     }
+    // mongoose code
+    //const user = await userModel.findOne({email:email})
 
-    const user = await userModel.findOne({email:email})
+    const user = await UserDB.findOne({ where: { email: email } });
     if(!user){
         res.status(400).json({
             status:"fail",
