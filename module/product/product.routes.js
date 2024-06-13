@@ -6,6 +6,7 @@ const getAllProducts = require("./controllers/getAllProducts");
 const addProducts = require("./controllers/addProducts");
 const deleteProduct = require("./controllers/deleteProduct");
 const updateProduct = require("./controllers/updateProduct");
+const productFilters = require("./controllers/productFilters");
 
 // Setup Multer for file uploads
 const storage = multer.memoryStorage();
@@ -16,6 +17,7 @@ router.get('/all',getAllProducts);
 router.post('/add', upload.array('images', 5), addProducts);
 router.delete('/delete/:id',deleteProduct);
 router.patch('/update/:id',updateProduct)
+router.get('/filter',productFilters);
 
 // export router 
 module.exports = router;
