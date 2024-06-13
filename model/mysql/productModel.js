@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: []
         },
         images: {
-            type: DataTypes.JSON,
+            type: DataTypes.TEXT, // Store images as Base64 strings
             allowNull: false
         }
 
