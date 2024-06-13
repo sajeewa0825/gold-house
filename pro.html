@@ -59,7 +59,7 @@
                     stock.textContent = `Stock: ${product.stock}`;
                     productDiv.appendChild(stock);
 
-                    const images = JSON.parse(product.images); // Assuming images are stored as JSON string
+                    const images = JSON.parse(product.images); // Assuming images are stored as JSON array
 
                     images.forEach(imageBase64 => {
                         const img = document.createElement('img');

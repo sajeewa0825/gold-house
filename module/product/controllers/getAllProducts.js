@@ -117,6 +117,9 @@
 // module.exports = getAllProducts;
 
 
+
+// -----------------------------sequelize Mysql------------------------------------------------
+
 const db = require("../../../model/mysql/index");
 
 // Mysql DB model call
