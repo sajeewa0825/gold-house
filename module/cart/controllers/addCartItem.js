@@ -1,0 +1,39 @@
+const db = require('../../../model/mysql/index');
+const Cart = db.cart;
+
+const addCartItem = async (req, res) => {
+    try {
+        const { productId, quantity, price } = req.body;
+        const userId = req.user.id; 
+
+        // Check if the item already exists in the cart for the user
+        const existingCartItem = await Cart.findOne({
+            where: {
+                userId: userId,
+                productId: productId
+            }
+        });
+
+        if (existingCartItem) {
+            // If item exists, update quantity and price
+            existingCartItem.quantity += quantity;
+            existingCartItem.price += price;
+            await existingCartItem.save();
+            res.status(200).json(existingCartItem);
+        } else {
+            // If item doesn't exist, create a new cart item
+            const newCartItem = await Cart.create({
+                userId: userId,
+                productId: productId,
+                quantity: quantity,
+                price: price
+            });
+            res.status(201).json(newCartItem);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = addCartItem;

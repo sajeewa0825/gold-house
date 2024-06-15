@@ -6,6 +6,7 @@ const path = require('path');
 const userRoutes = require("./module/user/user.routes")
 const productRoutes = require("./module/product/product.routes")
 const wishlistRoutes = require("./module/wishlist/wishlist.routes")
+const cartRoutes = require("./module/cart/cart.routes")
 
 const port = 3000;
 const app = express();
@@ -30,6 +31,7 @@ require("./model/productModel")
 app.use("/api/user", userRoutes)
 app.use("/api/product", productRoutes)
 app.use("/api/wishlist", wishlistRoutes);
+app.use("/api/cart", cartRoutes);
 
 // handle 404 not found error
 app.all("*", (req, res, next) => {
