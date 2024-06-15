@@ -25,6 +25,14 @@ db.sequelize = sequelize
 
 db.products = require('./productModel.js')(sequelize, DataTypes)
 db.user = require('./userModel.js')(sequelize, DataTypes)
+db.wishlist = require('./wishlistModel.js')(sequelize, DataTypes);
+
+// Define relationships
+db.user.hasMany(db.wishlist, { foreignKey: 'userId' });
+db.wishlist.belongsTo(db.user, { foreignKey: 'userId' });
+
+db.products.hasMany(db.wishlist, { foreignKey: 'productId' });
+db.wishlist.belongsTo(db.products, { foreignKey: 'productId' });
 
 db.sequelize.sync({ force: false })
 .then(() => {

@@ -7,7 +7,7 @@ const db = require("../../../model/mysql/index")
 const UserDB = db.user;
 
 const login = async (req, res) => {
-    const userModel = mongoose.model('user');
+    //const userModel = mongoose.model('user');
     const {email, password} = req.body;
 
     if(!email){
@@ -29,6 +29,7 @@ const login = async (req, res) => {
     //const user = await userModel.findOne({email:email})
 
     const user = await UserDB.findOne({ where: { email: email } });
+    console.log("User data",user.id);
     if(!user){
         res.status(400).json({
             status:"fail",

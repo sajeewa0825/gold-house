@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-const jwtManager = (user) =>{
+const jwtManager = (user) => {
     const accessToken = jwt.sign({
-        _id:user._id,
-        name:user.name,
-    }, process.env.JWT_SECRET);
+        id: user.id,
+        name: user.name,
+    }, process.env.JWT_SECRET, {
+        expiresIn: '24h'
+    });
 
     return accessToken;
 }

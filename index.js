@@ -5,6 +5,7 @@ require('dotenv').config();
 const path = require('path');
 const userRoutes = require("./module/user/user.routes")
 const productRoutes = require("./module/product/product.routes")
+const wishlistRoutes = require("./module/wishlist/wishlist.routes")
 
 const port = 3000;
 const app = express();
@@ -28,7 +29,7 @@ require("./model/productModel")
 // Main route
 app.use("/api/user", userRoutes)
 app.use("/api/product", productRoutes)
-
+app.use("/api/wishlist", wishlistRoutes);
 
 // handle 404 not found error
 app.all("*", (req, res, next) => {
