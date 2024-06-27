@@ -8,6 +8,7 @@ const addProducts = require("./controllers/addProducts");
 const deleteProduct = require("./controllers/deleteProduct");
 const updateProduct = require("./controllers/updateProduct");
 const productFilters = require("./controllers/productFilters");
+const buyProduct = require("./controllers/buyProduct");
 
 // Setup Multer for file uploads
 const storage = multer.memoryStorage();
@@ -20,6 +21,7 @@ router.use(middleware);
 router.post('/add', upload.array('images', 5), addProducts);
 router.delete('/delete/:id',deleteProduct);
 router.patch('/update/:id',updateProduct)
+router.post('/buy', buyProduct);
 
 // export router 
 module.exports = router;

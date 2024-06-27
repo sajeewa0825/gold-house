@@ -50,7 +50,7 @@ const sendMail = async (to, subject, token) => {
     .sendMail({
       to: to,
       from: process.env.NM_AUTH_USER,
-      text: text,
+      html: text,
       subject: subject,
     })
     .then(() => {
