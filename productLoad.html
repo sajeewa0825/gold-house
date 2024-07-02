@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .product {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .product img {
+            max-width: 100px;
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Products</h1>
+        <div id="products-list"></div> <!-- Container for displaying products -->
+    </div>
+
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const productsList = document.getElementById('products-list');
+
+    fetch('http://localhost:3000/api/product/all') // Replace with your backend API endpoint
+        .then(response => response.json())
+        .then(products => {
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+
+                const title = document.createElement('h2');
+                title.classList.add('product-title');
+                title.textContent = product.title;
+                productCard.appendChild(title);
+
+                const description = document.createElement('p');
+                description.classList.add('product-description');
+                description.textContent = product.description;
+                productCard.appendChild(description);
+
+                // Display images
+                if (product.images && product.images.length > 0) {
+                    product.images.forEach(image => {
+                        const img = document.createElement('img');
+                        img.classList.add('product-image');
+                        img.src = image.url;
+                        productCard.appendChild(img);
+                    });
+                }
+
+                productsList.appendChild(productCard);
+            });
+        })
+        .catch(error => console.error('Error fetching products:', error));
+});
+
+    </script>
+</body>
+</html>

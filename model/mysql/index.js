@@ -28,6 +28,7 @@ db.user = require('./userModel.js')(sequelize, DataTypes)
 db.wishlist = require('./wishlistModel.js')(sequelize, DataTypes);
 db.cart = require('./cartModel.js')(sequelize, DataTypes);
 db.order = require('./orderModel.js')(sequelize, DataTypes);
+db.ads = require('./adsModel.js')(sequelize, DataTypes);
 
 // Define relationships
 // wishlist table relationship with user and product

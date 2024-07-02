@@ -35,6 +35,8 @@
 
 // -----------------------------sequelize Mysql------------------------------------------------
 
+const fs = require('fs');
+const path = require('path');
 const db = require("../../../model/mysql/index");
 const Product = db.products;
 
@@ -49,10 +51,23 @@ const deleteProduct = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        // Parse the images field to get image paths
+        const images = JSON.parse(product.images);
+
+        // Delete the image files from the filesystem
+        images.forEach(image => {
+            const filePath = path.join(__dirname, '../../../', image.url);
+            fs.unlink(filePath, err => {
+                if (err) {
+                    console.error(`Failed to delete image file: ${filePath}`, err);
+                }
+            });
+        });
+
         // Delete the product
         await product.destroy();
 
-        res.status(200).json({ message: 'Product deleted successfully' });
+        res.status(200).json({ message: 'Product and associated images deleted successfully' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to delete product' });
@@ -60,3 +75,4 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = deleteProduct;
+

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Product</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Link to your CSS file for styling -->
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+      }
+
+      select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      #preview-images {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #preview-images img {
+        width: 150px;
+        height: auto;
+        margin: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Update Product</h1>
+      <form id="update-product-form">
+        <input type="hidden" id="productId" name="productId" />
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title"  /><br /><br />
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category"  /><br /><br />
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price"  /><br /><br />
+
+        <label for="description">Description:</label><br />
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          
+        ></textarea
+        ><br /><br />
+
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock"  /><br /><br />
+
+        <label for="metal">Metal:</label>
+        <input type="text" id="metal" name="metal"  /><br /><br />
+
+        <label for="weight">Weight:</label>
+        <input type="text" id="weight" name="weight"  /><br /><br />
+
+        <label for="length">Length:</label>
+        <input type="text" id="length" name="length"  /><br /><br />
+
+        <label for="width">Width:</label>
+        <input type="text" id="width" name="width"  /><br /><br />
+
+        <label for="ringSize">Ring Size:</label>
+        <input type="text" id="ringSize" name="ringSize"  /><br /><br />
+
+        <label for="color">Color:</label>
+        <input type="text" id="color" name="color"  /><br /><br />
+
+        <label for="stone">Stone:</label>
+        <input type="text" id="stone" name="stone"  /><br /><br />
+
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" >
+          <option value="men">Men</option>
+          <option value="women">Women</option></select
+        ><br /><br />
+
+        <label for="icedProduct">Iced Product:</label>
+        <input
+          type="checkbox"
+          id="icedProduct"
+          name="icedProduct"
+        /><br /><br />
+
+        <label for="style">Style:</label>
+        <input type="text" id="style" name="style" /><br /><br />
+
+        <label for="images">Images:</label><br />
+        <input type="file" id="images" name="images[]" multiple /><br /><br />
+
+        <div id="preview-images"></div>
+        <br /><br />
+        <!-- Container for previewing uploaded images -->
+
+        <button type="submit">Update Product</button>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const updateProductForm = document.getElementById(
+          "update-product-form"
+        );
+        const previewImagesContainer =
+          document.getElementById("preview-images");
+
+        // Function to preview selected images
+        const previewImages = () => {
+          previewImagesContainer.innerHTML = "";
+          const files = document.getElementById("images").files;
+
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              const img = document.createElement("img");
+              img.src = e.target.result;
+              previewImagesContainer.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+          }
+        };
+
+        // Event listener for file input change to preview images
+        document
+          .getElementById("images")
+          .addEventListener("change", previewImages);
+
+        // Event listener for form submission
+        updateProductForm.addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(updateProductForm);
+
+          try {
+            const response = await fetch(
+              "http://localhost:3000/api/product/update/8" +
+                formData.get("productId"),
+              {
+                method: "PUT",
+                body: formData,
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Failed to update product");
+            }
+
+            const updatedProduct = await response.json();
+            console.log("Product updated:", updatedProduct);
+
+            // Optionally, redirect to another page or show a success message
+            alert("Product updated successfully!");
+          } catch (error) {
+            console.error("Error updating product:", error);
+            alert("Failed to update product. Please try again.");
+          }
+        });
+      });
+    </script>
+    <!-- Link to your JavaScript file for handling form submission -->
+  </body>
+</html>

@@ -62,6 +62,8 @@ const updateProduct = async (req, res) => {
         style
     } = req.body;
 
+    console.log(req.body)
+
     try {
         // Find the product by ID
         let product = await Product.findByPk(productId);
@@ -86,6 +88,15 @@ const updateProduct = async (req, res) => {
         product.gender = gender || product.gender;
         product.iced_product = iced_product !== undefined ? iced_product : product.iced_product;
         product.style = style || product.style;
+
+        // Handle updated images if provided in form data
+        if (req.files && req.files.length > 0) {
+            const updatedImages = req.files.map(file => ({
+                url: '/uploads/' + file.filename // Assuming 'uploads' is your upload directory
+            }));
+            product.images = JSON.stringify(updatedImages);
+        }
+
         // Save updated product
         await product.save();
 

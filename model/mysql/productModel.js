@@ -26,19 +26,20 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         weight: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         length: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         width: {
-            type: DataTypes.FLOAT,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         ring_size: {
-            type: DataTypes.FLOAT
+            type: DataTypes.TEXT,
+            allowNull: false
         },
         color: {
             type: DataTypes.ENUM('gold', 'silver', 'rose gold', 'white gold'),
@@ -61,11 +62,11 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         review: {
-            type: DataTypes.JSON,
-            defaultValue: []
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         images: {
-            type: DataTypes.TEXT, // Store images as Base64 strings
+            type: DataTypes.TEXT, 
             allowNull: false
         }
 

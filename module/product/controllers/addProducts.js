@@ -46,74 +46,79 @@
 
 // -----------------------------sequelize Mysql------------------------------------------------
 
+const fs = require('fs');
+const path = require('path');
 const db = require("../../../model/mysql/index");
 
 // Mysql DB model call
 const Product = db.products;
 const multer = require('multer');
-const upload = multer();
+
 
 const addProducts = async (req, res) => {
-  const {
-    title,
-    category,
-    price,
-    description,
-    stock,
-    metal,
-    weight,
-    length,
-    width,
-    ring_size,
-    color,
-    stone,
-    gender,
-    iced_product,
-    style
-  } = req.body;
+    const {
+        title,
+        category,
+        price,
+        description,
+        stock,
+        metal,
+        weight,
+        length,
+        width,
+        color,
+        stone,
+        gender,
+        iced_product,
+        style,
+        review,
+        ring_size,
+    } = req.body;
 
-  const images = req.files.map(file => {
-    return file.buffer.toString('base64'); // Convert buffer to Base64 string
-  });
-
-  if (images.length === 0) {
-    return res.status(400).json({ error: 'At least one image is required' });
-  }
-
-  // Check if all required fields are present
-  const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style'];
-  const missingFields = requiredFields.filter(field => !req.body[field]);
-
-  if (missingFields.length > 0) {
-    return res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
-  }
-
-  try {
-    const product = await Product.create({
-      title,
-      category,
-      price,
-      description,
-      stock,
-      metal,
-      weight,
-      length,
-      width,
-      ring_size,
-      color,
-      stone,
-      images: JSON.stringify(images),
-      gender,
-      iced_product: iced_product || false,
-      style,
-      review: []
+    const images = req.files.map(file => {
+        return {
+            url: '/uploads/' + file.filename // Store the file path in the database
+        };
     });
 
-    res.status(201).json(product);
-  } catch (error) {
-    console.error(error);
-    res.status(400).json({ error: error.message });
-  }
+    if (images.length === 0) {
+        return res.status(400).json({ error: 'At least one image is required' });
+    }
+
+    // Check if all required fields are present
+    const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style', 'review', 'ring_size'];
+    const missingFields = requiredFields.filter(field => !req.body[field]);
+
+    if (missingFields.length > 0) {
+        return res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
+    }
+
+    try {
+        const product = await Product.create({
+            title,
+            category,
+            price,
+            description,
+            stock,
+            metal,
+            weight,
+            length,
+            width,
+            ring_size,
+            color,
+            stone,
+            images: JSON.stringify(images), // Store image paths as JSON string in the database
+            gender,
+            iced_product: iced_product || false,
+            style,
+            review,
+        });
+
+        res.status(201).json(product);
+    } catch (error) {
+        console.log("error", error);
+        res.status(400).json({ error: error.message });
+    }
 };
 
 module.exports = addProducts;

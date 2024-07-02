@@ -119,21 +119,36 @@
 
 
 // -----------------------------sequelize Mysql------------------------------------------------
-
 const db = require("../../../model/mysql/index");
 
 // Mysql DB model call
 const Product = db.products;
-
 const getAllProducts = async (req, res) => {
     try {
         const products = await Product.findAll();
-        res.status(200).json(products);
+
+        // Map through products to ensure images is a string and parse it
+        const productsWithImages = products.map(product => {
+            let parsedImages;
+            if (typeof product.images === 'string') {
+                parsedImages = JSON.parse(product.images); // Parse images JSON string to array of objects
+            } else {
+                parsedImages = product.images; // If already an object, use it as-is
+            }
+            
+            return {
+                ...product.toJSON(), // Convert Sequelize instance to JSON object
+                images: parsedImages
+            };
+        });
+
+        res.status(200).json(productsWithImages);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: error.message });
     }
 };
+
 
 module.exports = getAllProducts;
 
