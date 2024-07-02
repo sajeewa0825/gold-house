@@ -59,10 +59,11 @@ const updateProduct = async (req, res) => {
         stone,
         gender,
         iced_product,
-        style
+        style,
+        review
     } = req.body;
 
-    console.log(req.body)
+    console.log("req body",req.body)
 
     try {
         // Find the product by ID
@@ -88,8 +89,10 @@ const updateProduct = async (req, res) => {
         product.gender = gender || product.gender;
         product.iced_product = iced_product !== undefined ? iced_product : product.iced_product;
         product.style = style || product.style;
+        product.review = review || product.review;
 
         // Handle updated images if provided in form data
+        console.log(req.files)
         if (req.files && req.files.length > 0) {
             const updatedImages = req.files.map(file => ({
                 url: '/uploads/' + file.filename // Assuming 'uploads' is your upload directory
