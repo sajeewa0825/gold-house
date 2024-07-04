@@ -5,7 +5,8 @@ const middleware = require("../../middleware/auth");
 const resetEmail = require("./controlers/resetEmail");
 const resetPassword = require("./controlers/resetPassword");
 const emailVerify = require("./controlers/emailVerify");
-const resetEmailVerify = require("./controlers/resetEmailVerify");  
+const resetEmailVerify = require("./controlers/resetEmailVerify"); 
+const getTotalCustomers = require("./controlers/getTotalCustomers")
 
 const userRoutes = express.Router() 
 
@@ -16,6 +17,7 @@ userRoutes.post("/reset-email",resetEmail);
 userRoutes.post("/password-reset",resetPassword);
 userRoutes.get("/verify-email",emailVerify);
 userRoutes.get("/password-reset",resetEmailVerify);
+userRoutes.get('/total-customers', getTotalCustomers); 
 userRoutes.use(middleware);
 // userRoutes.get("/dashbord",userDashbord)
 
