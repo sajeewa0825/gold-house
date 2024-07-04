@@ -1,3 +1,5 @@
+// models/orderModel.js
+
 module.exports = (sequelize, DataTypes) => {
     const Order = sequelize.define("order", {
         userId: {
@@ -23,10 +25,27 @@ module.exports = (sequelize, DataTypes) => {
         totalPrice: {
             type: DataTypes.FLOAT,
             allowNull: false
-        }
+        },
+        address: {
+            type: DataTypes.TEXT,
+            allowNull: false
+        },
+        name:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        phone:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        status: {
+            type: DataTypes.ENUM('pending', 'sold'),
+            allowNull: false,
+            defaultValue: 'pending'
+        },
     }, {
         timestamps: true
     });
 
     return Order;
-}
+};
