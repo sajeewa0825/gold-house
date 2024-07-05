@@ -25,12 +25,12 @@ const upload = multer({ storage: storage });
 // Routes 
 router.get('/all',getAllProducts);
 router.get('/filter',productFilters);
-
+router.use(middleware);
 router.post('/add', upload.array('images', 5), addProducts);
 router.delete('/delete/:id',deleteProduct);
 router.put('/update/:id',upload.array('images', 5), updateProduct)
 router.post('/buy', buyProduct);
-router.use(middleware);
+
 
 // export router 
 module.exports = router;

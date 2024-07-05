@@ -29,7 +29,7 @@ const login = async (req, res) => {
     //const user = await userModel.findOne({email:email})
 
     const user = await UserDB.findOne({ where: { email: email } });
-    console.log("User data",user.id);
+    //console.log("User data",user.id);
     if(!user){
         res.status(400).json({
             status:"fail",
