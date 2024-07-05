@@ -9,6 +9,7 @@ const productRoutes = require("./module/product/product.routes")
 const wishlistRoutes = require("./module/wishlist/wishlist.routes")
 const cartRoutes = require("./module/cart/cart.routes")
 const orderRoutes = require("./module/order/order.routes")
+const medaiRoutes = require("./module/media/media.routes")
 
 
 const port = 3000;
@@ -33,8 +34,8 @@ mongoose.connect(process.env.MONGO_DB_URL, {}).then(() => {
 })
 
 // // mongoose.model("User", userSchema)
-require("./model/userModel")
-require("./model/productModel")
+// require("./model/userModel")
+// require("./model/productModel")
 
 // Main route
 app.use("/api/user", userRoutes)
@@ -42,6 +43,7 @@ app.use("/api/product", productRoutes)
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order",orderRoutes)
+app.use("/api/media",medaiRoutes)
 
 // handle 404 not found error
 app.all("*", (req, res, next) => {

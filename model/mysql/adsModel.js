@@ -1,13 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
 
     const Product = sequelize.define("ads", {
-        video: {
+        videoUrl: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         images: {
             type: DataTypes.TEXT, 
-            allowNull: false
+            allowNull: true
         }
 
     }, {
