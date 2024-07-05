@@ -149,6 +149,34 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+const getProduct = async (req, res) => {
+    try {
+        const product = await Product.findByPk(req.params.id);
 
-module.exports = getAllProducts;
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Ensure images is a string and parse it
+        let parsedImages;
+        if (typeof product.images === 'string') {
+            parsedImages = JSON.parse(product.images); // Parse images JSON string to array of objects
+        } else {
+            parsedImages = product.images; // If already an object, use it as-is
+        }
+
+        const productWithImages = {
+            ...product.toJSON(), // Convert Sequelize instance to JSON object
+            images: parsedImages
+        };
+
+        res.status(200).json(productWithImages);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+module.exports = {getAllProducts, getProduct};
 

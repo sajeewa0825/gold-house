@@ -3,7 +3,8 @@ const router = express.Router();
 const multer = require('multer');
 const middleware = require("../../middleware/auth");
 
-const getAllProducts = require("./controllers/getAllProducts");
+const getAllProducts = require("./controllers/getAllProducts").getAllProducts;
+const getproduct = require("./controllers/getAllProducts").getProduct;
 const addProducts = require("./controllers/addProducts");
 const deleteProduct = require("./controllers/deleteProduct");
 const updateProduct = require("./controllers/updateProduct");
@@ -24,6 +25,7 @@ const upload = multer({ storage: storage });
 
 // Routes 
 router.get('/all',getAllProducts);
+router.get('/get/:id',getproduct);
 router.get('/filter',productFilters);
 
 router.post('/add', upload.array('images', 5), addProducts);
