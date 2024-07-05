@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 'pending'
         },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     }, {
         timestamps: true
     });

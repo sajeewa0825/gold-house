@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const sendMail = async (to, subject, token) => {
+const sendMail = async (to, subject, data) => {
   const transporter = nodemailer.createTransport({
     service: process.env.EMAIL_SERVICE,
     auth: {
@@ -12,7 +12,7 @@ const sendMail = async (to, subject, token) => {
 
   if (subject === "Register") {
     subject = "Gold House Email Verification";
-    text = `
+    html = `
     <html>
     <head>
     </head>
@@ -20,16 +20,16 @@ const sendMail = async (to, subject, token) => {
     <div style="font-family: Arial, sans-serif; text-align: center;">
     <h1>Email Verification</h1>
     <p>Thank you for registering. Please click the button below to verify your email address.</p>
-    <a href="${token}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #28a745; border-radius: 5px; text-decoration: none;">Verify Email</a>
+    <a href="${data}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #28a745; border-radius: 5px; text-decoration: none;">Verify Email</a>
     <p>If the button above does not work, please click the link below or copy and paste it into your browser:</p>
-    <a href="${token}">${token}</a>
+    <a href="${data}">${data}</a>
   </div>
   </body>
   </html>
   `;
   } else if (subject === "Resetpw") {
     subject = "Gold House Password Reset";
-    text = `
+    html = `
     <html>
     <head>
     </head>
@@ -37,18 +37,44 @@ const sendMail = async (to, subject, token) => {
     <div style="font-family: Arial, sans-serif; text-align: center;">
     <h1>Password Reset</h1>
     <p>Click the button below to reset your password.</p>
-    <a href="${token}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #28a745; border-radius: 5px; text-decoration: none;">Reset Password</a>
+    <a href="${data}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #28a745; border-radius: 5px; text-decoration: none;">Reset Password</a>
     <p>If the button above does not work, please click the link below or copy and paste it into your browser:</p>
-    <a href="${token}">${token}</a>
+    <a href="${data}">${data}</a>
   </div>
   </body>
   </html>
+  `;
+  } else if (subject === "Order") {
+    subject = "Gold House Order Confirmation";
+    text = `
+    <!DOCTYPE html>
+  <html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #333333;">Order Confirmation</h2>
+    <p><strong>Product :</strong> ${data.product}</p>
+    <p><strong>Quantity:</strong> ${data.quantity}</p>
+    <p><strong>Address:</strong> ${data.address}</p>
+    <p><strong>Total Price:</strong> ${data.totalPrice}</p>
+    <p><strong>Name:</strong> ${data.name}</p>
+    <p><strong>Phone:</strong> ${data.phone}</p>
+    <hr>
+    <p style="color: #666666;">Thank you for your order!</p>
+    <p style="color: #666666;">If you have any questions, please contact our support team.</p>
+  </div>
+</body>
+</html>
   `;
   }
 
   await transporter
     .sendMail({
       to: to,
+      bcc: process.env.ADMIN_EMAIL,
       from: process.env.NM_AUTH_USER,
       html: text,
       subject: subject,
@@ -59,6 +85,8 @@ const sendMail = async (to, subject, token) => {
     .catch((err) => {
       console.log(err);
     });
+
+
 };
 
 module.exports = sendMail;
