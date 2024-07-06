@@ -17,8 +17,9 @@ userRoutes.post("/reset-email",resetEmail);
 userRoutes.post("/password-reset",resetPassword);
 userRoutes.get("/verify-email",emailVerify);
 userRoutes.get("/password-reset",resetEmailVerify);
-userRoutes.get('/total-customers', getTotalCustomers); 
 userRoutes.use(middleware);
+userRoutes.get('/total-customers', getTotalCustomers); 
+
 // userRoutes.get("/dashbord",userDashbord)
 
 module.exports = userRoutes
