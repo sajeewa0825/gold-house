@@ -85,6 +85,23 @@ const addProducts = async (req, res) => {
         return res.status(400).json({ error: 'At least one image is required' });
     }
 
+    //console.log("length", length)
+    const length1 = length.map(len =>{
+        return {
+            length: len
+        }
+    })
+
+    const color1 = color.map(co =>{
+        return{
+            color: co
+        }
+    })
+
+    console.log("color",color1)
+
+    //console.log("length1", length1)
+
     // Check if all required fields are present
     const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style', 'review', 'ring_size'];
     const missingFields = requiredFields.filter(field => !req.body[field]);
@@ -102,10 +119,10 @@ const addProducts = async (req, res) => {
             stock,
             metal,
             weight,
-            length,
+            length: JSON.stringify(length1),
             width,
             ring_size,
-            color,
+            color: JSON.stringify(color1),
             stone,
             images: JSON.stringify(images), // Store image paths as JSON string in the database
             gender,

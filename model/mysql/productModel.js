@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         color: {
-            type: DataTypes.ENUM('gold', 'silver', 'rose gold', 'white gold'),
+            type: DataTypes.TEXT,
             allowNull: false
         },
         stone: {
