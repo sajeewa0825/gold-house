@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+
 const sendMail = require("../../../manager/mail")
 const jwtEncrypt = require("../../../manager/jwtEncrypt")
 require("dotenv").config();
@@ -10,7 +10,7 @@ const UserDB = db.user;
 
 const resetEmail = async (req, res) => {
   const { email } = req.body;
-  //const userModel = mongoose.model("user");
+
 
   if (!email) {
     res.status(400).json({

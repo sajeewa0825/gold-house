@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const middleware = require("../../middleware/auth");
+const adminMiddleware = require("../../middleware/adminauth");
 const addMedia = require('./controllers/addAds');
 const getMedia = require('./controllers/getAds');
 const deleteMedia = require('./controllers/removeCartItem');
@@ -21,7 +21,7 @@ const upload = multer({ storage: storage });
 
 
 router.get('/all', getMedia);
-router.use(middleware);
+router.use(adminMiddleware);
 router.post('/add', upload.array('images', 5), addMedia);
 router.delete('/delete/:id', deleteMedia);
 

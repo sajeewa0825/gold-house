@@ -46,7 +46,7 @@ const sendMail = async (to, subject, data) => {
   `;
   } else if (subject === "Order") {
     subject = "Gold House Order Confirmation";
-    text = `
+    html = `
     <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -69,14 +69,32 @@ const sendMail = async (to, subject, data) => {
 </body>
 </html>
   `;
+  } else if(subject === "Register-Admin-Verify") {
+    subject = "Gold House Admin Verification";
+    html = `
+    <html>
+    <head>
+    </head>
+    <body>
+    <div style="font-family: Arial, sans-serif; text-align: center;">
+    <h1>Email Verification</h1>
+    <p>Thank you for registering. Please click the button below to verify your email address.</p>
+    <a href="${data}" style="display: inline-block; padding: 10px 20px; color: #fff; background-color: #28a745; border-radius: 5px; text-decoration: none;">Verify Email</a>
+    <p>If the button above does not work, please click the link below or copy and paste it into your browser:</p>
+    <a href="${data}">${data}</a>
+  </div>
+  </body>
+  </html>
+  `;
   }
 
-  await transporter
+  if ( subject === "Gold House Order Confirmation"){
+    await transporter
     .sendMail({
       to: to,
-      bcc: process.env.ADMIN_EMAIL,
+      bcc: process.env.ADMIN_EMAIL ,
       from: process.env.NM_AUTH_USER,
-      html: text,
+      html: html,
       subject: subject,
     })
     .then(() => {
@@ -85,6 +103,22 @@ const sendMail = async (to, subject, data) => {
     .catch((err) => {
       console.log(err);
     });
+
+  }else{
+    await transporter
+    .sendMail({
+      to: to,
+      from: process.env.NM_AUTH_USER,
+      html: html,
+      subject: subject,
+    })
+    .then(() => {
+      console.log("Email sent");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
 
 };

@@ -7,11 +7,14 @@ const updateOrder = require("./controllers/updateOder");
 const mostorder = require("./controllers/mostOder");
 const getTotalIncome = require("./controllers/getTotalIncome");
 const getOrderIncomeChartData  = require("./controllers/oderIncomeChart");
+const adminMiddleware = require("../../middleware/adminauth")
 
 
 router.use(middleware);
 router.post('/add', addOrder);
 router.get('/get', getOrders);
+
+router.use(adminMiddleware);
 router.put('/update/:id', updateOrder);
 router.get('/mostorder', mostorder);
 router.get('/total-income', getTotalIncome);

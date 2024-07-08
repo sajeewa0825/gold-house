@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         status: {
             type: DataTypes.STRING,
             defaultValue: 'pending'
+        },
+        role: {
+            type: DataTypes.STRING,
+            defaultValue: 'user'
         }
     }, {
         timestamps: true

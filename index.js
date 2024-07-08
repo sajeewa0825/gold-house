@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require("cors");
 require('dotenv').config();
 var bodyParser = require('body-parser')
@@ -27,11 +26,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-mongoose.connect(process.env.MONGO_DB_URL, {}).then(() => {
-    console.log("Database connection succesfuly");
-}).catch((err) => {
-    console.log(err);
-})
+// mongoose.connect(process.env.MONGO_DB_URL, {}).then(() => {
+//     console.log("Database connection succesfuly");
+// }).catch((err) => {
+//     console.log(err);
+// })
 
 // // mongoose.model("User", userSchema)
 // require("./model/userModel")

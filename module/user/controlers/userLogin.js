@@ -8,7 +8,7 @@ const UserDB = db.user;
 
 const login = async (req, res) => {
     //const userModel = mongoose.model('user');
-    const {email, password} = req.body;
+    const {email, password, admin} = req.body;
 
     if(!email){
         res.status(400).json({
@@ -38,7 +38,7 @@ const login = async (req, res) => {
         return;
     }
 
-    //check password
+
     const validPassword = await bcrypt.compare(password, user.password);
     
     if(!validPassword){
@@ -48,6 +48,16 @@ const login = async (req, res) => {
         });
         return;
     
+    }
+
+    if(admin){
+        if(user.role !== 'admin'){
+            res.status(400).json({
+                status:"fail",
+                message:"Invalid user role"
+            });
+            return;
+        }
     }
 
     if(user.status === 'pending'){
