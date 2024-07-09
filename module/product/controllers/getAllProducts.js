@@ -130,15 +130,35 @@ const getAllProducts = async (req, res) => {
         // Map through products to ensure images is a string and parse it
         const productsWithImages = products.map(product => {
             let parsedImages;
+            let parsedLengths;
+            let parsedColors;
             if (typeof product.images === 'string') {
                 parsedImages = JSON.parse(product.images); // Parse images JSON string to array of objects
             } else {
                 parsedImages = product.images; // If already an object, use it as-is
             }
+
+            if (typeof product.length === 'string') {
+                parsedLengths = JSON.parse(product.length); // Parse images JSON string to array of objects
+            }else {
+                parsedLengths = product.length; // If already an object, use it as-is
+            }
+
+
+            if (typeof product.color === 'string') {
+                parsedLengths = JSON.parse(product.color); // Parse images JSON string to array of objects
+            }else {
+                parsedLengths = product.color; // If already an object, use it as-is
+            }
+
+
+
             
             return {
                 ...product.toJSON(), // Convert Sequelize instance to JSON object
-                images: parsedImages
+                images: parsedImages,
+                length: parsedLengths,
+                color: parsedColors
             };
         });
 
@@ -159,15 +179,33 @@ const getProduct = async (req, res) => {
 
         // Ensure images is a string and parse it
         let parsedImages;
+        let parsedLengths;
+        let parsedColors;
         if (typeof product.images === 'string') {
             parsedImages = JSON.parse(product.images); // Parse images JSON string to array of objects
         } else {
             parsedImages = product.images; // If already an object, use it as-is
         }
 
+        if (typeof product.length === 'string') {
+            parsedLengths = JSON.parse(product.length); // Parse images JSON string to array of objects
+        }
+        else {
+            parsedLengths = product.length; // If already an object, use it as-is
+        }
+
+        if (typeof product.color === 'string') {
+            parsedColors = JSON.parse(product.color); // Parse images JSON string to array of objects
+        }else{
+            parsedColors = product.color; // If already an object, use it as-is
+        }
+
         const productWithImages = {
             ...product.toJSON(), // Convert Sequelize instance to JSON object
-            images: parsedImages
+            images: parsedImages,
+            length: parsedLengths,
+            color: parsedColors
+            
         };
 
         res.status(200).json(productWithImages);

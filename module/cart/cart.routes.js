@@ -8,9 +8,10 @@ const getCartItems = require('./controllers/getCartItems');
 
 router.use(middleware);
 router.post('/add', addCartItem);
-router.get('/all', getCartItems);
+router.get('/all/:id', getCartItems);
 router.delete('/removeitem', removeCartItem);
 
 
 // export router 
 module.exports = router;
+

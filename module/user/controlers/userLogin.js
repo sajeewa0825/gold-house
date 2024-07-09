@@ -60,7 +60,8 @@ const login = async (req, res) => {
         res.status(200).json({
             status:"success",
             message: 'Login successful',
-            accessToken:jwtManager(user)
+            accessToken:jwtManager(user),
+            userId : user.id
         });
         return;
     } else {
