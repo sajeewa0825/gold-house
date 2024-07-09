@@ -20,7 +20,7 @@ const addOrder = async (req, res) => {
         const product = await Product.findByPk(productId);
 
         console.log('User:', user['dataValues']);
-        console.log('Product:', product['dataValues']);
+        console.log('Product:', product['dataValues'].stock);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
@@ -29,6 +29,11 @@ const addOrder = async (req, res) => {
         if (!product) {
             return res.status(404).json({ message: 'Product not found.' });
         }
+
+        //update product quntity
+        
+        product.stock = product.stock - quantity;
+        await product.save();
 
         // // Calculate the total price
         // const totalPrice = product.price * quantity;
