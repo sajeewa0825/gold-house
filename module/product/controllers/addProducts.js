@@ -75,42 +75,46 @@ const addProducts = async (req, res) => {
         ring_size,
     } = req.body;
 
-    const images = req.files.map(file => {
-        return {
-            url: '/uploads/' + file.filename // Store the file path in the database
-        };
-    });
-
-    if (images.length === 0) {
-        return res.status(400).json({ error: 'At least one image is required' });
-    }
-
-    //console.log("length", length)
-    const length1 = length.map(len =>{
-        return {
-            length: len
-        }
-    })
-
-    const color1 = color.map(co =>{
-        return{
-            color: co
-        }
-    })
-
-    console.log("color",color1)
-
-    //console.log("length1", length1)
-
-    // Check if all required fields are present
-    const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style', 'review', 'ring_size'];
-    const missingFields = requiredFields.filter(field => !req.body[field]);
-
-    if (missingFields.length > 0) {
-        return res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
-    }
+    console.log("length  ", length)
+    console.log("color  ", color)
 
     try {
+        const images = req.files.map(file => {
+            return {
+                url: '/uploads/' + file.filename // Store the file path in the database//
+            };
+        });
+
+        if (images.length === 0) {
+            return res.status(400).json({ error: 'At least one image is required' });
+        }
+
+
+        const length1 = length.map(len => {
+            return {
+                length: len
+            }
+        })
+
+        const color1 = color.map(co => {
+            return {
+                color: co
+            }
+        })
+
+        console.log("color", color1)
+
+        //console.log("length1", length1)
+
+        // Check if all required fields are present
+        const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style', 'review', 'ring_size'];
+        const missingFields = requiredFields.filter(field => !req.body[field]);
+
+        if (missingFields.length > 0) {
+            return res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
+        }
+
+
         const product = await Product.create({
             title,
             category,

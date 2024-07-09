@@ -63,7 +63,8 @@ const updateProduct = async (req, res) => {
         review
     } = req.body;
 
-    console.log("req body",req.body)
+    console.log("length  ", length)
+    console.log("color  ", color)
 
     try {
         // Find the product by ID
@@ -73,6 +74,20 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        const length1 = length.map(len => {
+            return {
+                length: len
+            }
+        })
+
+        const color1 = color.map(co => {
+            return {
+                color: co
+            }
+        })
+
+
+
         // Update product fields
         product.title = title || product.title;
         product.category = category || product.category;
@@ -81,10 +96,10 @@ const updateProduct = async (req, res) => {
         product.stock = stock || product.stock;
         product.metal = metal || product.metal;
         product.weight = weight || product.weight;
-        product.length = length || product.length;
+        product.length = JSON.stringify(length1) || product.length;
         product.width = width || product.width;
         product.ring_size = ring_size || product.ring_size;
-        product.color = color || product.color;
+        product.color = JSON.stringify(color1) || product.color;
         product.stone = stone || product.stone;
         product.gender = gender || product.gender;
         product.iced_product = iced_product !== undefined ? iced_product : product.iced_product;
@@ -99,6 +114,7 @@ const updateProduct = async (req, res) => {
             }));
             product.images = JSON.stringify(updatedImages);
         }
+
 
         // Save updated product
         await product.save();

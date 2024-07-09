@@ -19,8 +19,8 @@ const addOrder = async (req, res) => {
         const user = await User.findByPk(userId);
         const product = await Product.findByPk(productId);
 
-        console.log('User:', user['dataValues']);
-        console.log('Product:', product['dataValues'].stock);
+        //console.log('User:', user['dataValues']);
+        //console.log('Product:', product['dataValues'].stock);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
@@ -31,7 +31,7 @@ const addOrder = async (req, res) => {
         }
 
         //update product quntity
-        
+
         product.stock = product.stock - quantity;
         await product.save();
 
