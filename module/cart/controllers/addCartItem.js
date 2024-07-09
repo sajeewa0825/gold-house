@@ -3,8 +3,8 @@ const Cart = db.cart;
 
 const addCartItem = async (req, res) => {
     try {
-        const { productId, quantity, price } = req.body;
-        const userId = req.user.id; 
+        const { productId, quantity, price, increment, decrement } = req.body;
+        const userId = req.user.id;
 
         // Check if the item already exists in the cart for the user
         const existingCartItem = await Cart.findOne({
@@ -16,10 +16,19 @@ const addCartItem = async (req, res) => {
 
         if (existingCartItem) {
             // If item exists, update quantity and price
-            existingCartItem.quantity += quantity;
-            existingCartItem.price += price;
-            await existingCartItem.save();
-            res.status(200).json(existingCartItem);
+            if (increment) {
+                existingCartItem.quantity += quantity;
+                existingCartItem.price += price;
+                await existingCartItem.save();
+                res.status(200).json(existingCartItem);
+            } else if (decrement) {
+                existingCartItem.quantity -= quantity;
+                existingCartItem.price -= price;
+                await existingCartItem.save();
+                res.status(200).json(existingCartItem);
+            } else {
+                res.status(404).json({ error: "something went to wrong" });
+            }
         } else {
             // If item doesn't exist, create a new cart item
             const newCartItem = await Cart.create({
