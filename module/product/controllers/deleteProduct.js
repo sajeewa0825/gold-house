@@ -54,6 +54,9 @@ const deleteProduct = async (req, res) => {
         // Parse the images field to get image paths
         const images = JSON.parse(product.images);
 
+        // Delete the product
+        await product.destroy();
+
         // Delete the image files from the filesystem
         images.forEach(image => {
             const filePath = path.join(__dirname, '../../../', image.url);
@@ -64,13 +67,17 @@ const deleteProduct = async (req, res) => {
             });
         });
 
-        // Delete the product
-        await product.destroy();
 
         res.status(200).json({ message: 'Product and associated images deleted successfully' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Failed to delete product' });
+        //console.log(error);
+        if (error.parent.sqlMessage.split(":")[1]) {
+            return res.status(500).json({ error: error.parent.sqlMessage.split(":")[1] });
+            //console.log("error", error.parent.sqlMessage.split(":")[1]);
+        } else {
+            res.status(500).json({ error: 'Failed to delete product' });
+            console.log("error", error);
+        }
     }
 };
 

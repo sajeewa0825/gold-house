@@ -8,14 +8,14 @@ const auth = (req, res, next) => {
         //console.log("decoded data ",decoded.role);
         if(decoded.role !== 'admin' || decoded.status !== 'active'){
             return res.status(401).json({
-                error: "Authentication failed!"
+                error: "Admin Authentication failed!"
             });
         }
         req.user = decoded; // add user data to request
         //console.log("decode data ",decoded);   
     } catch (error) {
         return res.status(401).json({
-            error: "Authentication failed!"
+            error: "Admin Authentication failed!"
         });
     }
 

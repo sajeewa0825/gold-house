@@ -41,6 +41,8 @@
 
 const db = require("../../../model/mysql/index");
 const Product = db.products;
+const fs = require('fs');
+const path = require('path');
 
 const updateProduct = async (req, res) => {
     const productId = req.params.id; // Assuming the product ID is passed as a route parameter
@@ -85,6 +87,19 @@ const updateProduct = async (req, res) => {
                 color: co
             }
         })
+
+        // Delete existing images from the upload folder
+        if (product.images) {
+            const existingImages = JSON.parse(product.images);
+            existingImages.forEach(image => {
+                const filePath = path.join(__dirname, '../../../', image.url);
+                fs.unlink(filePath, err => {
+                    if (err) {
+                        console.error(`Failed to delete image file: ${filePath}`, err);
+                    }
+                });
+            });
+        }
 
 
 
