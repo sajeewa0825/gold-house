@@ -14,12 +14,12 @@ const medaiRoutes = require("./module/media/media.routes")
 const port = 3000;
 const app = express();
 
-
+// handle cors error
 app.use(cors())
 app.use('/uploads', express.static('uploads'));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-// handle cors error
+
 
 // parse application/x-www-form-urlencoded
 app.use(express.json());

@@ -46,30 +46,36 @@ const sendMail = async (to, subject, data) => {
   `;
   } else if (subject === "Order") {
     subject = "Gold House Order Confirmation";
+    const productsHTML = data.products.map(product => `
+        <p><strong>Product:</strong> ${product.title}</p>
+        <p><strong>Quantity:</strong> ${product.quantity}</p>
+        <p><strong>Total Price:</strong> ${product.totalPrice}</p>
+        <hr>
+    `).join('');
+
     html = `
     <!DOCTYPE html>
-  <html lang="en">
-  <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
-  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-    <h2 style="color: #333333;">Order Confirmation</h2>
-    <p><strong>Product :</strong> ${data.product}</p>
-    <p><strong>Quantity:</strong> ${data.quantity}</p>
-    <p><strong>Address:</strong> ${data.address}</p>
-    <p><strong>Total Price:</strong> ${data.totalPrice}</p>
-    <p><strong>Name:</strong> ${data.name}</p>
-    <p><strong>Phone:</strong> ${data.phone}</p>
-    <hr>
-    <p style="color: #666666;">Thank you for your order!</p>
-    <p style="color: #666666;">If you have any questions, please contact our support team.</p>
-  </div>
-</body>
-</html>
-  `;
-  } else if(subject === "Register-Admin-Verify") {
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #333333;">Order Confirmation</h2>
+            ${productsHTML}
+            <p><strong>Address:</strong> ${data.address}</p>
+            <p><strong>Total Order Price:</strong> ${data.totalOrderPrice}</p>
+            <p><strong>Name:</strong> ${data.name}</p>
+            <p><strong>Phone:</strong> ${data.phone}</p>
+            <hr>
+            <p style="color: #666666;">Thank you for your order!</p>
+            <p style="color: #666666;">If you have any questions, please contact our support team.</p>
+        </div>
+    </body>
+    </html>
+    `;
+  } else if (subject === "Register-Admin-Verify") {
     subject = "Gold House Admin Verification";
     html = `
     <html>
@@ -88,36 +94,36 @@ const sendMail = async (to, subject, data) => {
   `;
   }
 
-  if ( subject === "Gold House Order Confirmation"){
+  if (subject === "Gold House Order Confirmation") {
     await transporter
-    .sendMail({
-      to: to,
-      bcc: process.env.ADMIN_EMAIL ,
-      from: process.env.NM_AUTH_USER,
-      html: html,
-      subject: subject,
-    })
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .sendMail({
+        to: to,
+        bcc: process.env.ADMIN_EMAIL,
+        from: process.env.NM_AUTH_USER,
+        html: html,
+        subject: subject,
+      })
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-  }else{
+  } else {
     await transporter
-    .sendMail({
-      to: to,
-      from: process.env.NM_AUTH_USER,
-      html: html,
-      subject: subject,
-    })
-    .then(() => {
-      console.log("Email sent");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .sendMail({
+        to: to,
+        from: process.env.NM_AUTH_USER,
+        html: html,
+        subject: subject,
+      })
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
 
