@@ -8,7 +8,8 @@ const productRoutes = require("./module/product/product.routes")
 const wishlistRoutes = require("./module/wishlist/wishlist.routes")
 const cartRoutes = require("./module/cart/cart.routes")
 const orderRoutes = require("./module/order/order.routes")
-const medaiRoutes = require("./module/media/media.routes")
+const medaiRoutes = require("./module/media/media.routes");
+const reviewRoutes = require("./module/review/review.routes");
 
 
 const port = 3000;
@@ -45,6 +46,7 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order",orderRoutes)
 app.use("/api/media",medaiRoutes)
+app.use("/api/review",reviewRoutes)
 
 // handle 404 not found error
 app.all("*", (req, res, next) => {

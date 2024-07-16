@@ -29,6 +29,7 @@ db.wishlist = require('./wishlistModel.js')(sequelize, DataTypes);
 db.cart = require('./cartModel.js')(sequelize, DataTypes);
 db.order = require('./orderModel.js')(sequelize, DataTypes);
 db.ads = require('./adsModel.js')(sequelize, DataTypes);
+db.review = require('./reviewModel.js')(sequelize, DataTypes);
 
 // Define relationships
 // wishlist table relationship with user and product
@@ -52,6 +53,12 @@ db.order.belongsTo(db.user, { foreignKey: 'userId' });
 db.products.hasMany(db.order, { foreignKey: 'productId' });
 db.order.belongsTo(db.products, { foreignKey: 'productId' });
 
+// Review table relationship with user and product
+db.user.hasMany(db.review, { foreignKey: 'userId' });
+db.review.belongsTo(db.user, { foreignKey: 'userId' });
+
+db.products.hasMany(db.review, { foreignKey: 'productId' });
+db.review.belongsTo(db.products, { foreignKey: 'productId' });
 
 db.sequelize.sync({ force: false })
     .then(() => {
