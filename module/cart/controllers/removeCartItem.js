@@ -4,7 +4,7 @@ const Cart = db.cart;
 const removeCartItem = async (req, res) => {
     try {
         const { cartItemId  } = req.body;
-        // Find the cart item by its ID and delete it
+        // Find the cart item by its ID and delete  it
         const deletedCartItem = await Cart.destroy({
             where: {
                 id: cartItemId
