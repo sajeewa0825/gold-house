@@ -1,3 +1,4 @@
+const e = require('express');
 const db = require('../../../model/mysql/index');
 const Review = db.review;
 const Product = db.products;
@@ -14,25 +15,30 @@ const addReview = async (req, res) => {
         let review = await Review.findOne({ where: { userId, productId } });
 
         if (review) {
-            // Update the existing review
-            review.rating = rating;
-            await review.save();
+           // return res.status(400).send({ message: 'You have already reviewed this product' });
         } else {
             // Create a new review
             review = await Review.create({ userId, productId, rating });
         }
 
-        // Calculate the new average rating for the product
-        const reviews = await Review.findAll({ where: { productId } });
-        const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
-        const averageRating = totalRating / reviews.length;
 
-        // Update the product with the new average rating
         const product = await Product.findByPk(productId);
-        if (product) {
-            product.review = parseInt(averageRating);
-            await product.save();
+        const productReview = JSON.parse(product.dataValues.review);
+
+        if (1 === rating) {
+            productReview[0].one = parseInt(productReview[0].one) + 1;
+        } else if (2 === rating) {
+            productReview[1].two = parseInt(productReview[1].two) + 1;
+        } else if (3 === rating) {
+            productReview[2].three = parseInt(productReview[2].three) + 1;
+        } else if (4 === rating) {
+            productReview[3].four = parseInt(productReview[3].four) + 1;
+        } else if (5 === rating) {
+            productReview[4].five = parseInt(productReview[4].five) + 1;
         }
+
+        product.review = JSON.stringify(productReview);
+        await product.save();
 
         return res.status(200).send({ message: 'Review added or updated successfully', review });
     } catch (error) {

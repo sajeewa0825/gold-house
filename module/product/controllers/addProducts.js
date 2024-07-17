@@ -71,7 +71,6 @@ const addProducts = async (req, res) => {
         gender,
         iced_product,
         style,
-        review,
         ring_size,
     } = req.body;
 
@@ -107,7 +106,7 @@ const addProducts = async (req, res) => {
         //console.log("length1", length1)
 
         // Check if all required fields are present
-        const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style', 'review', 'ring_size'];
+        const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style','ring_size'];
         const missingFields = requiredFields.filter(field => !req.body[field]);
 
         if (missingFields.length > 0) {
@@ -131,8 +130,7 @@ const addProducts = async (req, res) => {
             images: JSON.stringify(images), // Store image paths as JSON string in the database
             gender,
             iced_product: iced_product || false,
-            style,
-            review,
+            style
         });
 
         res.status(201).json(product);

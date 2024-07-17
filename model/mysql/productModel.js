@@ -62,7 +62,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         review: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.TEXT,
+            defaultValue: JSON.stringify([
+                { "one": "0" },
+                { "two": "0" },
+                { "three": "0" },
+                { "four": "0" },
+                { "five": "0" }
+            ]),
             allowNull: false
         },
         images: {
