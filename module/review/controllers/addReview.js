@@ -15,7 +15,7 @@ const addReview = async (req, res) => {
         let review = await Review.findOne({ where: { userId, productId } });
 
         if (review) {
-           // return res.status(400).send({ message: 'You have already reviewed this product' });
+            return res.status(400).send({ message: 'You have already reviewed this product' });
         } else {
             // Create a new review
             review = await Review.create({ userId, productId, rating });
