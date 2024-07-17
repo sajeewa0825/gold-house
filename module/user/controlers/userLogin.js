@@ -68,6 +68,7 @@ const login = async (req, res) => {
         return;
     } else if(user.status === 'active'){
         res.status(200).json({
+            userId : user.id,
             status:"success",
             message: 'Login successful',
             accessToken:jwtManager(user)

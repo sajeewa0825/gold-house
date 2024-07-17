@@ -130,15 +130,46 @@ const getAllProducts = async (req, res) => {
         // Map through products to ensure images is a string and parse it
         const productsWithImages = products.map(product => {
             let parsedImages;
+            let parsedLengths;
+            let parsedColors;
+            let parsedReviews;
             if (typeof product.images === 'string') {
                 parsedImages = JSON.parse(product.images); // Parse images JSON string to array of objects
             } else {
                 parsedImages = product.images; // If already an object, use it as-is
             }
+
+            if (typeof product.length === 'string') {
+                parsedLengths = JSON.parse(product.length); // Parse images JSON string to array of objects
+            }else {
+                parsedLengths = product.length; // If already an object, use it as-is
+            }
+
+
+            if (typeof product.color === 'string') {
+                parsedLengths = JSON.parse(product.color); // Parse images JSON string to array of objects
+            }else {
+                parsedLengths = product.color; // If already an object, use it as-is
+            }
+
+            if (typeof product.review === 'string') {
+                parsedReviews= JSON.parse(product.review); // Parse images JSON string to array of objects
+            }else {
+                parsedReviews = product.review; // If already an object, use it as-is
+            }
+
+
+            
+
+
+
             
             return {
                 ...product.toJSON(), // Convert Sequelize instance to JSON object
-                images: parsedImages
+                images: parsedImages,
+                length: parsedLengths,
+                color: parsedColors,
+                review: parsedReviews
             };
         });
 
@@ -149,6 +180,61 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+const getProduct = async (req, res) => {
+    try {
+        const product = await Product.findByPk(req.params.id);
 
-module.exports = getAllProducts;
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        // Ensure images is a string and parse it
+        let parsedImages;
+        let parsedLengths;
+        let parsedColors;
+        let parsedReviews;
+        if (typeof product.images === 'string') {
+            parsedImages = JSON.parse(product.images); // Parse images JSON string to array of objects
+        } else {
+            parsedImages = product.images; // If already an object, use it as-is
+        }
+
+        if (typeof product.length === 'string') {
+            parsedLengths = JSON.parse(product.length); // Parse images JSON string to array of objects
+        }
+        else {
+            parsedLengths = product.length; // If already an object, use it as-is
+        }
+
+        if (typeof product.color === 'string') {
+            parsedColors = JSON.parse(product.color); // Parse images JSON string to array of objects
+        }else{
+            parsedColors = product.color; // If already an object, use it as-is
+        }
+
+        if (typeof product.review === 'string') {
+            parsedReviews = JSON.parse(product.review); 
+            console.log("parsed : ",parsedReviews)// Parse images JSON string to array of objects
+        }
+        else {
+            parsedReviews = product.review; // If already an object, use it as-is
+        }
+        const productWithImages = {
+            ...product.toJSON(), // Convert Sequelize instance to JSON object
+            images: parsedImages,
+            length: parsedLengths,
+            color: parsedColors,
+            review : parsedReviews
+            
+        };
+
+        res.status(200).json(productWithImages);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+module.exports = {getAllProducts, getProduct};
 

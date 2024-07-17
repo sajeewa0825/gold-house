@@ -3,7 +3,7 @@ const Cart = db.cart;
 
 const getCartItems = async (req, res) => {
     try {
-        const userId = req.user.id; // Assuming user ID is available in req.user
+        const userId = req.params.id; // Assuming user ID is available in req.user
 
         // Find all cart items for the user
         const cartItems = await Cart.findAll({
