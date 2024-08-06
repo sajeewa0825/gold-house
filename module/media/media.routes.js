@@ -8,14 +8,15 @@ const deleteMedia = require('./controllers/removeCartItem');
 
 
 // Setup Multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/') // Specify the directory where files should be stored
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname) // Specify a unique file name
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, 'uploads/') // Specify the directory where files should be stored
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + '-' + file.originalname) // Specify a unique file name
+//     }
+// });
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
