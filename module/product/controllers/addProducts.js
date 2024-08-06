@@ -49,6 +49,7 @@
 const fs = require('fs');
 const path = require('path');
 const db = require("../../../model/mysql/index");
+const cloudinary = require("../../../manager/cloudnary");
 
 // Mysql DB model call
 const Product = db.products;
@@ -78,15 +79,13 @@ const addProducts = async (req, res) => {
     console.log("color  ", color)
 
     try {
-        const images = req.files.map(file => {
-            return {
-                url: '/uploads/' + file.filename // Store the file path in the database//
-            };
-        });
+        // const images = req.files.map(file => {
+        //     return {
+        //         url: '/uploads/' + file.filename // Store the file path in the database//
+        //     };
+        // });
 
-        if (images.length === 0) {
-            return res.status(400).json({ error: 'At least one image is required' });
-        }
+
 
 
         const length1 = length.map(len => {
@@ -106,11 +105,25 @@ const addProducts = async (req, res) => {
         //console.log("length1", length1)
 
         // Check if all required fields are present
-        const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style','ring_size'];
+        const requiredFields = ['title', 'category', 'price', 'description', 'stock', 'metal', 'weight', 'length', 'width', 'color', 'stone', 'gender', 'style', 'ring_size'];
         const missingFields = requiredFields.filter(field => !req.body[field]);
 
         if (missingFields.length > 0) {
             return res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
+        }
+
+        // Upload images to Cloudinary
+        const images = await Promise.all(req.files.map(file => {
+            return new Promise((resolve, reject) => {
+                cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+                    if (error) return reject(error);
+                    resolve({ url: result.secure_url });
+                }).end(file.buffer);
+            });
+        }));
+
+        if (images.length === 0) {
+            return res.status(400).json({ error: 'At least one image is required' });
         }
 
 
