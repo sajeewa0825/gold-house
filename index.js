@@ -10,6 +10,7 @@ const cartRoutes = require("./module/cart/cart.routes")
 const orderRoutes = require("./module/order/order.routes")
 const medaiRoutes = require("./module/media/media.routes");
 const reviewRoutes = require("./module/review/review.routes");
+const auth = require("./middleware/auth");
 
 
 const port = 3000;
@@ -47,6 +48,14 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/order",orderRoutes)
 app.use("/api/media",medaiRoutes)
 app.use("/api/review",reviewRoutes)
+
+// check is authorized 
+app.get ("/api/check/auth",auth,(req,res)=>{
+    res.status(200).json({
+        status:"success",
+        message:"Authorized"
+    });
+})
 
 // handle 404 not found error
 app.all("*", (req, res, next) => {
