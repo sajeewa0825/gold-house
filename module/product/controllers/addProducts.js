@@ -65,9 +65,7 @@ const addProducts = async (req, res) => {
         stock,
         metal,
         weight,
-        length,
         width,
-        color,
         stone,
         gender,
         iced_product,
@@ -75,8 +73,6 @@ const addProducts = async (req, res) => {
         ring_size,
     } = req.body;
 
-    console.log("length  ", length)
-    console.log("color  ", color)
 
     try {
         // const images = req.files.map(file => {
@@ -85,22 +81,25 @@ const addProducts = async (req, res) => {
         //     };
         // });
 
-
-
-
+        // check data array or not
+        const length = Array.isArray(req.body.length) ? req.body.length : [req.body.length];
+        //console.log("length", length)
         const length1 = length.map(len => {
             return {
                 length: len
             }
         })
 
+
+        const color = Array.isArray(req.body.color) ? req.body.color : [req.body.color];
+        //console.log("color", color)
         const color1 = color.map(co => {
             return {
                 color: co
             }
         })
 
-        console.log("color", color1)
+        //console.log("color1", color1)
 
         //console.log("length1", length1)
 

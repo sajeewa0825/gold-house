@@ -62,8 +62,7 @@ const updateProduct = async (req, res) => {
         stone,
         gender,
         iced_product,
-        style,
-        review
+        style
     } = req.body;
 
     console.log("length  ", length)
@@ -154,7 +153,7 @@ const updateProduct = async (req, res) => {
         product.gender = gender || product.gender;
         product.iced_product = iced_product !== undefined ? iced_product : product.iced_product;
         product.style = style || product.style;
-        product.review = review || product.review;
+        product.review = product.review;
         product.images = JSON.stringify(images);
 
         // Handle updated images if provided in form data
